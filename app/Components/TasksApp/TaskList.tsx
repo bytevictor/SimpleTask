@@ -42,7 +42,7 @@ function Task({
   const playSoundUncheck = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("./sounds/CompletedTaskInverted.mpeg");
+    const audio = new Audio("./sounds/CompletedTaskBassInverted.mpeg");
     audio.play();
   };
 
