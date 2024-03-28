@@ -94,7 +94,7 @@ const ThemePod = ({
 };
 
 export default function ThemeMenu() {
-  const [theme, setTheme] = useLocalStorage("theme", "dark");
+  const [theme, setTheme] = useLocalStorage("theme", "dim");
 
   // useState(
   //   () => {

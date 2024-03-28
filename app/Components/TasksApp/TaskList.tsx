@@ -11,7 +11,9 @@ export default function TaskList({
   onDeleteTask: any;
 }) {
   return (
-    <ul className="w-1/2 mt-24 flex justify-center flex-col">
+    <ul
+      className="w-1/2 mt-24 flex justify-center flex-col"
+    >
       {[...tasks].reverse().map((task: any) => (
         <li className="flex flex-row w-full my-2" key={task.id}>
           <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
@@ -49,7 +51,7 @@ function Task({
 
     const audio = new Audio("/sounds/delete.mp3");
     audio.play();
-  }
+  };
 
   console.log("Task", task);
 
