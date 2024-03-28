@@ -53,8 +53,6 @@ function Task({
     audio.play();
   };
 
-  console.log("Task", task);
-
   const [isEditing, setIsEditing] = useState(task.isNew);
   let taskContent;
   if (isEditing) {

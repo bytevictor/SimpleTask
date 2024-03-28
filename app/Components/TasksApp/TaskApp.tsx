@@ -3,9 +3,11 @@
 import { useEffect, useReducer } from "react";
 import AddTask from "./AddTask";
 import TaskList from "./TaskList";
+import useLocalStorageReducer from "@/app/_lib/customHooks/useLocalStorageWithReducer";
 
 export default function TaskApp() {
-  const [tasks, dispatch] = useReducer(tasksReducer, initialTasks);
+  //const [tasks, setTasks] = useLocalStorage("tasks", []);
+  const [tasks, dispatch] = useLocalStorageReducer(tasksReducer, "tasks", initialTasks);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -56,10 +58,10 @@ export default function TaskApp() {
   );
 }
 
-function tasksReducer(tasks: any, action: any) {
+function tasksReducer(tasks: Array<any>, action: any) {
   switch (action.type) {
     case "added": {
-      return [
+      const newTasks = [
         ...tasks,
         {
           id: action.id,
@@ -68,11 +70,13 @@ function tasksReducer(tasks: any, action: any) {
           isNew: action.isNew,
         },
       ];
+      //setSavedTasks(newTasks);
+      return newTasks;
     }
     case "changed": {
       return tasks.map((t: any) => {
         if (t.id === action.task.id) {
-          return action.task;
+          return {...action.task, isNew: false};
         } else {
           return t;
         }
