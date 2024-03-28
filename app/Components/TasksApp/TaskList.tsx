@@ -29,10 +29,17 @@ function Task({
   onChange: any;
   onDelete: any;
 }) {
-  const playSound = () => {
+  const playSoundCheck = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("/completedTaskSound.mp3");
+    const audio = new Audio("/sounds/[Original] completedTaskSound.mp3");
+    audio.play();
+  };
+
+  const playSoundUncheck = () => {
+    console.log("Playing sound");
+
+    const audio = new Audio("/sounds/CompletedTaskInverted.mpeg");
     audio.play();
   };
 
@@ -73,7 +80,11 @@ function Task({
             ...task,
             done: e.target.checked,
           });
-          playSound();
+          if (e.target.checked) {
+            playSoundCheck();
+          } else {
+            playSoundUncheck();
+          }
         }}
       />
       {taskContent}
