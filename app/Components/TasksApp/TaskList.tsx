@@ -12,7 +12,7 @@ export default function TaskList({
 }) {
   return (
     <ul
-      className="w-1/2 mt-24 flex justify-center flex-col"
+      className="lg:w-1/2 w-full mt-24 flex justify-center flex-col"
     >
       {[...tasks].reverse().map((task: any) => (
         <li className="flex flex-row w-full my-2" key={task.id}>
@@ -101,7 +101,7 @@ function Task({
   return (
     <label className="w-full grid grid-cols-5 grid-rows-1">
       <input
-        className="checkbox self-center checkbox-lg"
+        className="checkbox self-center checkbox-lg ml-4 lg:ml-0"
         type="checkbox"
         checked={task.done}
         onChange={(e) => {
@@ -123,7 +123,7 @@ function Task({
           onDelete(task.id);
           playSoundDelete();
         }}
-        className="btn btn-md btn-circle btn-outline btn-error self-end justify-self-end"
+        className="btn btn-md btn-circle btn-outline btn-error self-end justify-self-end mr-4 lg:mr-0"
       >
         <TrashIcon />
       </button>
