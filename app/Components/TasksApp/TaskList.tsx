@@ -1,3 +1,4 @@
+import TrashIcon from "@/app/_lib/icons/TrashIcon";
 import { useState } from "react";
 
 export default function TaskList({
@@ -43,7 +44,9 @@ function Task({
     audio.play();
   };
 
-  const [isEditing, setIsEditing] = useState(false);
+  console.log("Task", task)
+
+  const [isEditing, setIsEditing] = useState(task.isNew);
   let taskContent;
   if (isEditing) {
     taskContent = (
@@ -57,22 +60,27 @@ function Task({
               text: e.target.value,
             });
           }}
+          onBlur={() => setIsEditing(false)}
+          autoFocus
         />
-        <button onClick={() => setIsEditing(false)}>Save</button>
       </>
     );
   } else {
     taskContent = (
       <>
-        <span className="col-span-3">{task.text}</span>
-        <button onClick={() => setIsEditing(true)}>Edit</button>
+        <span
+          className="col-span-3 self-center align-middle text-start w-full min-h-6"
+          onDoubleClick={() => setIsEditing(true)}
+        >
+          {task.text}
+        </span>
       </>
     );
   }
   return (
-    <label className="w-full grid grid-cols-6 grid-rows-1">
+    <label className="w-full grid grid-cols-5 grid-rows-1">
       <input
-        className="checkbox self-center"
+        className="checkbox self-center checkbox-lg"
         type="checkbox"
         checked={task.done}
         onChange={(e) => {
@@ -88,7 +96,13 @@ function Task({
         }}
       />
       {taskContent}
-      <button onClick={() => onDelete(task.id)}>Delete</button>
+
+      <button
+        onClick={() => onDelete(task.id)}
+        className="btn btn-md btn-circle btn-outline btn-error self-end justify-self-end"
+      >
+        <TrashIcon />
+      </button>
     </label>
   );
 }

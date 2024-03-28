@@ -15,6 +15,7 @@ export default function TaskApp() {
       type: 'added',
       id: nextId++,
       text: text,
+      isNew: true
     });
   }
 
@@ -53,7 +54,8 @@ function tasksReducer(tasks: any, action: any) {
       return [...tasks, {
         id: action.id,
         text: action.text,
-        done: false
+        done: false,
+        isNew: action.isNew
       }];
     }
     case 'changed': {
@@ -76,7 +78,7 @@ function tasksReducer(tasks: any, action: any) {
 
 let nextId = 3;
 const initialTasks = [
-  { id: 0, text: 'Philosopher’s Path', done: true },
-  { id: 1, text: 'Visit the temple', done: false },
-  { id: 2, text: 'Drink matcha', done: false }
+  { id: 0, text: 'Philosopher’s Path', done: true, isNew: false },
+  { id: 1, text: 'Visit the temple', done: false, isNew: false},
+  { id: 2, text: 'Drink matcha', done: false, isNew: false }
 ];
