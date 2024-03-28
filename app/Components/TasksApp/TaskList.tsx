@@ -44,6 +44,13 @@ function Task({
     audio.play();
   };
 
+  const playSoundDelete = () => {
+    console.log("Playing sound");
+
+    const audio = new Audio("/sounds/delete.mp3");
+    audio.play();
+  }
+
   console.log("Task", task);
 
   const [isEditing, setIsEditing] = useState(task.isNew);
@@ -52,7 +59,7 @@ function Task({
     taskContent = (
       <>
         <input
-          className="input input-bordered col-span-3"
+          className="input input-bordered col-span-3 font-semibold text-xl"
           value={task.text}
           onChange={(e) => {
             onChange({
@@ -60,7 +67,19 @@ function Task({
               text: e.target.value,
             });
           }}
-          onBlur={() => setIsEditing(false)}
+          onBlur={(e) => {
+            setIsEditing(false);
+
+            //If empty onLeave, drop the task
+            if (e.target.value === "") {
+              onDelete(task.id);
+            }
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              (e.target as HTMLInputElement).blur();
+            }
+          }}
           autoFocus
         />
       </>
@@ -69,7 +88,7 @@ function Task({
     taskContent = (
       <>
         <span
-          className="col-span-3 self-center align-middle text-start w-full min-h-6"
+          className="col-span-3 self-center align-middle text-start w-full min-h-12 font-semibold text-xl items-center inline-flex"
           onDoubleClick={() => setIsEditing(true)}
         >
           {task.text}
@@ -98,7 +117,10 @@ function Task({
       {taskContent}
 
       <button
-        onClick={() => onDelete(task.id)}
+        onClick={() => {
+          onDelete(task.id);
+          playSoundDelete();
+        }}
         className="btn btn-md btn-circle btn-outline btn-error self-end justify-self-end"
       >
         <TrashIcon />
