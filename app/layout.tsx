@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ConfigMenu from "./Components/ConfigMenu/ConfigMenu";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="navbar bg-base-100">
+          <div className="navbar-start"></div>
+          <div className="navbar-end">
+            <ConfigMenu />
+          </div>
+        </div>
+        {children}
+      </body>
     </html>
   );
 }

@@ -12,7 +12,7 @@ export default function TaskList({
   return (
     <ul className="w-1/2 flex justify-center flex-col">
       {tasks.map((task: any) => (
-        <li className="flex flex-row w-full " key={task.id}>
+        <li className="flex flex-row w-full my-2" key={task.id}>
           <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
         </li>
       ))}
@@ -65,7 +65,7 @@ function Task({
   return (
     <label className="w-full grid grid-cols-6 grid-rows-1">
       <input
-        className="checkbox"
+        className="checkbox self-center"
         type="checkbox"
         checked={task.done}
         onChange={(e) => {
