@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "SimpleTask",
   description: "A simple, fast and light task manager. Created by bytevictor.",
   icons: {
-    icon: './favicon.png',
+    icon: './favicon.ico',
   },
 };
 

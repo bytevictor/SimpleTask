@@ -42,14 +42,14 @@ function Task({
   const playSoundUncheck = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("/sounds/CompletedTaskInverted.mpeg");
+    const audio = new Audio("./sounds/CompletedTaskInverted.mpeg");
     audio.play();
   };
 
   const playSoundDelete = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("/sounds/delete.mp3");
+    const audio = new Audio("./sounds/delete.mp3");
     audio.play();
   };
 
