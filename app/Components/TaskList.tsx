@@ -42,7 +42,7 @@ function Task({
     taskContent = (
       <>
         <input
-          className="input input-bordered w-full max-w-xs"
+          className="input input-bordered col-span-3"
           value={task.text}
           onChange={(e) => {
             onChange({
@@ -57,13 +57,13 @@ function Task({
   } else {
     taskContent = (
       <>
-        {task.text}
+        <span className="col-span-3">{task.text}</span>
         <button onClick={() => setIsEditing(true)}>Edit</button>
       </>
     );
   }
   return (
-    <label>
+    <label className="w-full grid grid-cols-6 grid-rows-1">
       <input
         className="checkbox"
         type="checkbox"
