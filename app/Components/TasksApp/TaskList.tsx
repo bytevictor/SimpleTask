@@ -35,7 +35,7 @@ function Task({
   const playSoundCheck = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("/sounds/[Original] completedTaskSound.mp3");
+    const audio = new Audio("./sounds/[Original] completedTaskSound.mp3");
     audio.play();
   };
 
