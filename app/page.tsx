@@ -1,12 +1,12 @@
 import Image from "next/image";
 import { SoundButton } from "./Components/SoundButtonTest";
-import { TaskList } from "./Components/TaskList";
+import TaskApp from "./Components/TaskApp";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center p-24">
       <SoundButton />
-      <TaskList/>
+      <TaskApp />
     </main>
   );
 }

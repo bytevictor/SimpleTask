@@ -1,41 +1,83 @@
-"use client";
-
-import { useDragAndDrop } from "@formkit/drag-and-drop/react";
 import { useState } from "react";
-import { ListElement } from "./ListElement";
-import { animations } from "@formkit/drag-and-drop";
-import { v4 as uuid } from "uuid";
 
-export function TaskList() {
-  const taskList: Task[] = [];
+export default function TaskList({
+  tasks,
+  onChangeTask,
+  onDeleteTask,
+}: {
+  tasks: any;
+  onChangeTask: any;
+  onDeleteTask: any;
+}) {
+  return (
+    <ul className="w-1/2 flex justify-center flex-col">
+      {tasks.map((task: any) => (
+        <li className="flex flex-row w-full " key={task.id}>
+          <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
+        </li>
+      ))}
+    </ul>
+  );
+}
 
-  const [tasksState, setTasks] = useState(taskList);
-  const [parent, tasks] = useDragAndDrop<HTMLUListElement, Task>(taskList, {
-    plugins: [animations()],
-  });
+function Task({
+  task,
+  onChange,
+  onDelete,
+}: {
+  task: any;
+  onChange: any;
+  onDelete: any;
+}) {
+  const playSound = () => {
+    console.log("Playing sound");
 
-  function addTask() {
-    const id = uuid()
+    const audio = new Audio("/completedTaskSound.mp3");
+    audio.play();
+  };
 
-    tasks.push({
-      id: id,
-      name: "Task " + id,
-      completed: false,
-      date: new Date(),
-    });
-    setTasks([...tasks]);
+  const [isEditing, setIsEditing] = useState(false);
+  let taskContent;
+  if (isEditing) {
+    taskContent = (
+      <>
+        <input
+          className="input input-bordered w-full max-w-xs"
+          value={task.text}
+          onChange={(e) => {
+            onChange({
+              ...task,
+              text: e.target.value,
+            });
+          }}
+        />
+        <button onClick={() => setIsEditing(false)}>Save</button>
+      </>
+    );
+  } else {
+    taskContent = (
+      <>
+        {task.text}
+        <button onClick={() => setIsEditing(true)}>Edit</button>
+      </>
+    );
   }
-
-  console.log(tasks)
-
-return (
-    <>
-        <button className="btn btn-primary" onClick={addTask}></button>
-        <ul ref={parent}>
-            {tasks.map((task, index) => (
-                <ListElement key={index} task={task} />
-            ))}
-        </ul>
-    </>
-);
+  return (
+    <label>
+      <input
+        className="checkbox"
+        type="checkbox"
+        checked={task.done}
+        onChange={(e) => {
+          onChange({
+            ...task,
+            done: e.target.checked,
+          });
+          playSound();
+        }}
+      />
+      {taskContent}
+      <button onClick={() => onDelete(task.id)}>Delete</button>
+    </label>
+  );
 }
