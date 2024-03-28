@@ -97,7 +97,7 @@ function tasksReducer(tasks: Array<any>, action: any) {
 }
 
 const initialTasks = [
-  { id: 0, text: "Philosopher’s Path", done: true, isNew: false },
+  { id: 0, text: "Contemplate the entropy of the universe", done: true, isNew: false },
   { id: 1, text: "Visit the temple", done: false, isNew: false },
   { id: 2, text: "Drink matcha", done: false, isNew: false },
 ];

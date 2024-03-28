@@ -121,7 +121,7 @@ function Task({
           onDelete(task.id);
           playSoundDelete();
         }}
-        className="btn btn-md btn-circle btn-outline btn-error self-end justify-self-end mr-4 lg:mr-0"
+        className="btn btn-md btn-circle btn-outline btn-error self-center justify-self-end mr-4 lg:mr-0"
       >
         <TrashIcon />
       </button>
