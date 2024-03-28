@@ -35,7 +35,6 @@ export default function TaskApp() {
 
   return (
     <>
-      <h1>Day off in Kyoto</h1>
       <AddTask
         onAddTask={handleAddTask}
       />

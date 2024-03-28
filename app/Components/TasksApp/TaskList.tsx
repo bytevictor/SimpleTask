@@ -11,8 +11,8 @@ export default function TaskList({
   onDeleteTask: any;
 }) {
   return (
-    <ul className="w-1/2 flex justify-center flex-col">
-      {tasks.map((task: any) => (
+    <ul className="w-1/2 mt-24 flex justify-center flex-col">
+      {[...tasks].reverse().map((task: any) => (
         <li className="flex flex-row w-full my-2" key={task.id}>
           <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
         </li>
@@ -44,7 +44,7 @@ function Task({
     audio.play();
   };
 
-  console.log("Task", task)
+  console.log("Task", task);
 
   const [isEditing, setIsEditing] = useState(task.isNew);
   let taskContent;
