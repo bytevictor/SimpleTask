@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { SoundButton } from "./Components/SoundButtonTest";
-import TaskApp from "./Components/TaskApp";
+import { SoundButton } from "./Components/TasksApp/SoundButtonTest";
+import TaskApp from "./Components/TasksApp/TaskApp";
 
 export default function Home() {
   return (
