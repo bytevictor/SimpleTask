@@ -4,10 +4,15 @@ import { useEffect, useReducer } from "react";
 import AddTask from "./AddTask";
 import TaskList from "./TaskList";
 import useLocalStorageReducer from "@/app/_lib/customHooks/useLocalStorageWithReducer";
+import { v4 as uuid } from "uuid";
 
 export default function TaskApp() {
   //const [tasks, setTasks] = useLocalStorage("tasks", []);
-  const [tasks, dispatch] = useLocalStorageReducer(tasksReducer, "tasks", initialTasks);
+  const [tasks, dispatch] = useLocalStorageReducer(
+    tasksReducer,
+    "tasks",
+    initialTasks
+  );
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -26,7 +31,7 @@ export default function TaskApp() {
   function handleAddTask(text: any) {
     dispatch({
       type: "added",
-      id: nextId++,
+      id: uuid(),
       text: text,
       isNew: true,
     });
@@ -76,7 +81,7 @@ function tasksReducer(tasks: Array<any>, action: any) {
     case "changed": {
       return tasks.map((t: any) => {
         if (t.id === action.task.id) {
-          return {...action.task, isNew: false};
+          return { ...action.task, isNew: false };
         } else {
           return t;
         }
@@ -91,7 +96,6 @@ function tasksReducer(tasks: Array<any>, action: any) {
   }
 }
 
-let nextId = 3;
 const initialTasks = [
   { id: 0, text: "Philosopher’s Path", done: true, isNew: false },
   { id: 1, text: "Visit the temple", done: false, isNew: false },
