@@ -65,7 +65,7 @@ jobs:
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
       - name: Check folder content of android output
-        run: echo "/app/build:" && ls -la ./android/app/build && echo "/app/build/outputs:" && ls -la ./android/app/build/outputs && echo "/app/build/outputs/bundle/release:" && ls -la ./android/app/build/outputs/bundle/release 
+        run: echo "/app/build:" && ls -la ./android/app/build && echo "/app/build/outputs:" && ls -la ./android/app/build/outputs && echo "/app/build/outputs/apk:" && ls -la ./android/app/build/outputs/apk && echo "/app/build/outputs/bundle/release:" && ls -la ./android/app/build/outputs/bundle/release 
 
       - name: Set Tag
         id: current-datetime
@@ -103,7 +103,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./android/app/build/outputs/apk/release/app-release.apk
+          asset_path: ./android/app/build/outputs/apk/app-release.apk
           asset_name: SimpleTask.apk
           asset_content_type: application/vnd.android.package-archive
 
