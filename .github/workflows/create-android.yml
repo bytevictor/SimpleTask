@@ -61,6 +61,9 @@ jobs:
           echo "${{ secrets.RELEASE_KEYSTORE }}" > android/release.jks.base64
           base64 -d android/release.jks.base64 > android/release.decrypted.jks
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+          
       - name: Sign dev build .aab
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
