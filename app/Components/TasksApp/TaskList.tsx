@@ -1,3 +1,4 @@
+import DragIcon from "@/app/_lib/icons/DragIcon";
 import TrashIcon from "@/app/_lib/icons/TrashIcon";
 import { useState } from "react";
 
@@ -12,10 +13,10 @@ export default function TaskList({
 }) {
   return (
     <ul
-      className="lg:w-1/2 w-full mt-24 flex justify-center flex-col"
+      className="lg:w-3/4 w-full mt-24 flex justify-center flex-col"
     >
       {[...tasks].reverse().map((task: any) => (
-        <li className="flex flex-row w-full my-2" key={task.id}>
+        <li className="flex flex-row w-full p-2 hover:bg-base-200 rounded-md" key={task.id}>
           <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
         </li>
       ))}
@@ -97,7 +98,9 @@ function Task({
     );
   }
   return (
-    <label className="w-full grid grid-cols-5 grid-rows-1">
+    <label className="w-full grid grid-cols-6 grid-rows-1">
+      <DragIcon/>
+
       <input
         className="checkbox self-center checkbox-lg ml-4 lg:ml-0"
         type="checkbox"
