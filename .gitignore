@@ -38,3 +38,5 @@ next-env.d.ts
 # android keystore
 android/*.jks
 android/*.jks.base64
+
+android/
