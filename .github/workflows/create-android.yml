@@ -48,11 +48,11 @@ jobs:
 
       - name: Capacitor copy
         run: npx cap copy
-      
-      # TODO: Check for folder structure in README for generating splash screen 
-      - name: Generate icons and splash screen to android folder 
-        run:  if [ -d "./resources" ]; then npm install @capacitor/assets --save-dev && npx capacitor-assets generate --android; fi
-        
+
+      # TODO: Check for folder structure in README for generating splash screen
+      - name: Generate icons and splash screen to android folder
+        run: if [ -d "./resources" ]; then npm install @capacitor/assets --save-dev && npx capacitor-assets generate --android; fi
+
       - name: Build app bundle
         run: cd android && ./gradlew bundle && ./gradlew assembleDebug
 
@@ -65,7 +65,7 @@ jobs:
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
       - name: Check folder content of android output
-        run: ls ./android/app/build/outputs/bundle/release
+        run: ls -la ./android/app/build/outputs/bundle/release && echo "/app:" && ls -la ./android/app/
 
       - name: Set Tag
         id: current-datetime
@@ -86,13 +86,13 @@ jobs:
           draft: false
           prerelease: true
       - name: Upload Release Asset
-        id: upload-release-asset 
+        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: android/app/release/app-release.apk
+          asset_path: ./android/app/build/outputs/bundle/release
           asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
 
