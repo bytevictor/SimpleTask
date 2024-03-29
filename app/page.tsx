@@ -11,7 +11,7 @@ const TaskAppNoSSR = dynamic(() => import("./Components/TasksApp/TaskApp"), {
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center lg:pt-0 lg:p-24 md:p-0 pt-0">
+    <main className="flex min-h-full flex-col items-center lg:pt-0 lg:p-24 md:p-0 pt-0">
         <TaskAppNoSSR />
     </main>
   );
