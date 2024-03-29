@@ -51,8 +51,6 @@ export default function TaskList({
           onDragEnd={handleSort}
           onTouchEnd={handleSort}
           onDragOver={(e) => e.preventDefault()}
-          
-          
           className={clsx(
             "flex flex-row w-full p-2 hover:bg-base-200 rounded-md",
             {
@@ -134,7 +132,10 @@ function Task({
     taskContent = (
       <>
         <span
-          className="col-span-3 self-center align-middle text-start w-full min-h-12 font-semibold text-xl items-center inline-flex"
+          className={clsx(
+            "col-span-3 self-center align-middle text-start w-full min-h-12 font-semibold text-xl items-center inline-flex",
+            { "line-through": task.done }
+          )}
           onDoubleClick={() => setIsEditing(true)}
         >
           {task.text}
