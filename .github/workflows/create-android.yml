@@ -91,7 +91,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
-          asset_path: ./android/app/build/outputs/apk/debug/app-release.apk
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/release/app-release.apk
           asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
 
