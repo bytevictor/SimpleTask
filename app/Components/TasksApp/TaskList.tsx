@@ -45,9 +45,14 @@ export default function TaskList({
       {tasks.map((task: any, index: number) => (
         <li
           onDragStart={() => (dragTask.current = index)}
+          onTouchStart={() => (dragTask.current = index)}
           onDragEnter={() => handleDragEnter(index)}
+          onTouchMove={() => handleDragEnter(index)}
           onDragEnd={handleSort}
+          onTouchEnd={handleSort}
           onDragOver={(e) => e.preventDefault()}
+          
+          
           className={clsx(
             "flex flex-row w-full p-2 hover:bg-base-200 rounded-md",
             {
