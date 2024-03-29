@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: "zulu"
-          java-version: "17"
+          java-version: "11"
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -45,11 +45,11 @@ jobs:
 
       - name: Capacitor copy
         run: npx cap copy
-      
-      # TODO: Check for folder structure in README for generating splash screen 
-      - name: Generate icons and splash screen to android folder 
-        run:  if [ -d "./resources" ]; then npm install @capacitor/assets --save-dev && npx capacitor-assets generate --android; fi
-        
+
+      # TODO: Check for folder structure in README for generating splash screen
+      - name: Generate icons and splash screen to android folder
+        run: if [ -d "./resources" ]; then npm install @capacitor/assets --save-dev && npx capacitor-assets generate --android; fi
+
       - name: Build app bundle
         run: cd android && ./gradlew bundle && ./gradlew assembleDebug
 
@@ -64,16 +64,49 @@ jobs:
       - name: Check folder content of android output
         run: ls ./android/app/build/outputs/bundle/release
 
-      - name: Set Tag
-        id: current-datetime
-        run: echo "CURRENT_DATETIME=$(date +'%Y-%m-%d-%H_%M_%S%z')" >> "$GITHUB_OUTPUT"
+      - name: Set version
+        id: version
+        run: echo "VERSION=v0.0.${GITHUB_RUN_NUMBER}" >> "$GITHUB_OUTPUT"
 
-      - name: Build Release
-        shell: bash
-        run: |
-          hub release create ${{ steps.current-datetime.outputs.CURRENT_DATETIME }} \
-          -m ${{ steps.current-datetime.outputs.CURRENT_DATETIME }} \
-          -a ./android/app/build/outputs/bundle/release/app-release-signed.aab \
-          -a ./android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          release_name: Release ${{ steps.version.outputs.VERSION }}
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset .aab
+        id: upload-release-asset-aab
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/bundle/release/app-release-signed.aab
+          asset_name: SimpleTask.aab
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset .apk
+        id: upload-release-asset-apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/apk/debug/app-debug.apk
+          asset_name: SimpleTask.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      # - name: Build Release
+      #   shell: bash
+      #   run: |
+      #     hub release create ${{ steps.current-datetime.outputs.CURRENT_DATETIME }} \
+      #     -m ${{ steps.current-datetime.outputs.CURRENT_DATETIME }} \
+      #     -a ./android/app/build/outputs/bundle/release/app-release-signed.aab \
+      #     -a ./android/app/build/outputs/apk/debug/app-debug.apk
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
