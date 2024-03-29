@@ -65,7 +65,7 @@ jobs:
         run: jarsigner -keystore android/release.decrypted.jks -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" -signedjar ./android/app/build/outputs/bundle/release/app-release-signed.aab ./android/app/build/outputs/bundle/release/app-release.aab release
 
       - name: Check folder content of android output
-        run: ls -la ./android/app/build/outputs/bundle/release && echo "/app:" && ls -la ./android/app/
+        run: echo "/app/build:" && ls -la ./android/app/build && echo "/app/build/outputs:" && ls -la ./android/app/build/outputs && echo "/app/build/outputs/bundle/release:" && ls -la ./android/app/build/outputs/bundle/release 
 
       - name: Set Tag
         id: current-datetime
@@ -85,15 +85,26 @@ jobs:
           release_name: Release ${{ steps.version.outputs.VERSION }}
           draft: false
           prerelease: true
-      - name: Upload Release Asset
-        id: upload-release-asset
+      - name: Upload Release Asset .aab
+        id: upload-release-asset-aab
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./android/app/build/outputs/bundle/release/app-release.aab
-          asset_name: app-release.aab
+          asset_path: ./android/app/build/outputs/bundle/release/app-release-signed.aab
+          asset_name: SimpleTask.aab
+          asset_content_type: application/zip
+
+      - name: Upload Release Asset .apk
+        id: upload-release-asset-apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./android/app/build/outputs/apk/release/app-release.apk
+          asset_name: SimpleTask.apk
           asset_content_type: application/vnd.android.package-archive
 
       # - name: Build Release
