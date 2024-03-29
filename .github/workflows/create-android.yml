@@ -73,7 +73,7 @@ jobs:
 
       - name: Set version
         id: version
-        run: ::set-output name=VERSION::v0.0.${GITHUB_RUN_NUMBER}
+        run: echo "VERSION=v0.0.${GITHUB_RUN_NUMBER}"
 
       - name: Create Release
         id: create_release
