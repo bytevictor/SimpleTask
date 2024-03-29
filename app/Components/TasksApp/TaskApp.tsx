@@ -51,11 +51,20 @@ export default function TaskApp() {
     });
   }
 
+  //Mimics setState
+  function handleStateTask(tasks: any) {
+    dispatch({
+      type: "state",
+      tasks: tasks,
+    });
+  }
+
   return (
     <>
       <AddTask onAddTask={handleAddTask} />
       <TaskList
         tasks={tasks}
+        setTasks={handleStateTask}
         onChangeTask={handleChangeTask}
         onDeleteTask={handleDeleteTask}
       />
@@ -67,15 +76,14 @@ function tasksReducer(tasks: Array<any>, action: any) {
   switch (action.type) {
     case "added": {
       const newTasks = [
-        ...tasks,
         {
           id: action.id,
           text: action.text,
           done: false,
           isNew: action.isNew,
         },
+        ...tasks,
       ];
-      //setSavedTasks(newTasks);
       return newTasks;
     }
     case "changed": {
@@ -90,6 +98,9 @@ function tasksReducer(tasks: Array<any>, action: any) {
     case "deleted": {
       return tasks.filter((t: any) => t.id !== action.id);
     }
+    case "state": {
+      return [...action.tasks];
+    }
     default: {
       throw Error("Unknown action: " + action.type);
     }
@@ -97,7 +108,12 @@ function tasksReducer(tasks: Array<any>, action: any) {
 }
 
 const initialTasks = [
-  { id: 0, text: "Contemplate the inevitable increase of entropy in the universe", done: true, isNew: false },
-  { id: 1, text: "Call grandma", done: false, isNew: false },
   { id: 2, text: "Drink matcha", done: false, isNew: false },
+  { id: 1, text: "Call grandma", done: false, isNew: false },
+  {
+    id: 0,
+    text: "Contemplate the inevitable increase of entropy in the universe",
+    done: true,
+    isNew: false,
+  },
 ];

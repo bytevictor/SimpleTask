@@ -1,22 +1,62 @@
 import DragIcon from "@/app/_lib/icons/DragIcon";
 import TrashIcon from "@/app/_lib/icons/TrashIcon";
-import { useState } from "react";
+import { animations } from "@formkit/drag-and-drop";
+import { dragAndDrop, useDragAndDrop } from "@formkit/drag-and-drop/react";
+import clsx from "clsx";
+import { useRef, useState } from "react";
 
 export default function TaskList({
   tasks,
+  setTasks,
   onChangeTask,
   onDeleteTask,
 }: {
   tasks: any;
+  setTasks: any;
   onChangeTask: any;
   onDeleteTask: any;
 }) {
+  const listRef = useRef(null);
+
+  const [draggedOverTask, setDraggedOverTask] = useState<number | null>(null);
+
+  const dragTask = useRef<number>(0);
+  const draggedOverTaskIndex = useRef<number>(0);
+
+  function handleDragEnter(index: number) {
+    draggedOverTaskIndex.current = index;
+    setDraggedOverTask(index);
+  }
+
+  function handleSort() {
+    setDraggedOverTask(null);
+    const methodsClone = [...tasks];
+    const temp = methodsClone[dragTask.current];
+    methodsClone[dragTask.current] = methodsClone[draggedOverTaskIndex.current];
+    methodsClone[draggedOverTaskIndex.current] = temp;
+    setTasks(methodsClone);
+  }
+
   return (
     <ul
+      ref={listRef}
       className="lg:w-3/4 w-full mt-24 flex justify-center flex-col"
     >
-      {[...tasks].reverse().map((task: any) => (
-        <li className="flex flex-row w-full p-2 hover:bg-base-200 rounded-md" key={task.id}>
+      {tasks.map((task: any, index: number) => (
+        <li
+          onDragStart={() => (dragTask.current = index)}
+          onDragEnter={() => handleDragEnter(index)}
+          onDragEnd={handleSort}
+          onDragOver={(e) => e.preventDefault()}
+          className={clsx(
+            "flex flex-row w-full p-2 hover:bg-base-200 rounded-md",
+            {
+              "border-dashed border border-primary": index == draggedOverTask,
+            }
+          )}
+          key={task.id}
+          draggable
+        >
           <Task task={task} onChange={onChangeTask} onDelete={onDeleteTask} />
         </li>
       ))}
@@ -98,8 +138,10 @@ function Task({
     );
   }
   return (
-    <label className="w-full grid grid-cols-6 grid-rows-1">
-      <DragIcon/>
+    <div className="w-full grid grid-cols-6 grid-rows-1">
+      <div className="drag-handle flex cursor-grab">
+        <DragIcon />
+      </div>
 
       <input
         className="checkbox self-center checkbox-lg ml-4 lg:ml-0"
@@ -128,6 +170,6 @@ function Task({
       >
         <TrashIcon />
       </button>
-    </label>
+    </div>
   );
 }
