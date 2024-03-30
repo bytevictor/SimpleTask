@@ -4,10 +4,10 @@ import ConfigMenu from "./ConfigMenu";
 export default function MainNavbar() {
   return (
     <div className="navbar bg-base-100">
-      <div className="navbar-start">
+      <div className="navbar-start pl-2 pt-2">
         <CompletedTasksSwap />
       </div>
-      <div className="navbar-end">
+      <div className="navbar-end pr-2 pt-2">
         <ConfigMenu />
       </div>
     </div>
