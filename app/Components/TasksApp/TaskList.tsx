@@ -1,7 +1,7 @@
+
+import { useConfig } from "@/app/_lib/contexts/ConfigContext";
 import DragIcon from "@/app/_lib/icons/DragIcon";
 import TrashIcon from "@/app/_lib/icons/TrashIcon";
-import { animations } from "@formkit/drag-and-drop";
-import { dragAndDrop, useDragAndDrop } from "@formkit/drag-and-drop/react";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 
@@ -16,6 +16,8 @@ export default function TaskList({
   onChangeTask: any;
   onDeleteTask: any;
 }) {
+  const {config} = useConfig();
+
   const listRef = useRef(null);
 
   const [draggedOverTask, setDraggedOverTask] = useState<number | null>(null);
@@ -56,6 +58,8 @@ export default function TaskList({
             {
               "border-dashed border-primary": index == draggedOverTask,
               "border-base-100": index != draggedOverTask,
+              //dont display if it's done on config
+              "hidden": !config.showCompletedTasks && task.done,
             }
           )}
           key={task.id}
@@ -77,24 +81,24 @@ function Task({
   onChange: any;
   onDelete: any;
 }) {
-  const playSoundCheck = () => {
-    console.log("Playing sound");
+  const {config} = useConfig();
 
-    const audio = new Audio("./sounds/[Original] completedTaskSound.mp3");
+  const playSoundCheck = () => {
+    const audio = new Audio(config.checkAudio);
     audio.play();
   };
 
   const playSoundUncheck = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("./sounds/CompletedTaskBassInverted.mpeg");
+    const audio = new Audio(config.uncheckAudio);
     audio.play();
   };
 
   const playSoundDelete = () => {
     console.log("Playing sound");
 
-    const audio = new Audio("./sounds/delete.mp3");
+    const audio = new Audio(config.deleteAudio);
     audio.play();
   };
 
