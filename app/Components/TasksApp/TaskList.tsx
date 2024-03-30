@@ -42,7 +42,7 @@ export default function TaskList({
   return (
     <ul
       ref={listRef}
-      className="lg:w-3/4 w-full mt-24 flex justify-center flex-col"
+      className="lg:w-5/6 w-full mt-24 flex justify-center flex-col"
     >
       {tasks.map((task: any, index: number) => (
         <li
