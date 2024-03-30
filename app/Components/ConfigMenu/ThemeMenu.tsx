@@ -135,7 +135,7 @@ export default function ThemeMenu() {
       </div>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-60 h-96 overflow-y-scroll scroll-mr-2"
+        className="w-60 h-[calc(100vh-6rem)] dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box overflow-y-scroll scroll-mr-2"
       >
         {themesArray.map((arrayThemeName) => (
           <ThemePod
