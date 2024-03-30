@@ -47,14 +47,15 @@ export default function TaskList({
           onDragStart={() => (dragTask.current = index)}
           onTouchStart={() => (dragTask.current = index)}
           onDragEnter={() => handleDragEnter(index)}
-          onTouchMove={() => handleDragEnter(index)}
+          //onTouchMove={() => handleDragEnter(index)}
           onDragEnd={handleSort}
-          onTouchEnd={handleSort}
+          //onTouchEnd={handleSort}
           onDragOver={(e) => e.preventDefault()}
           className={clsx(
-            "flex flex-row w-full p-2 hover:bg-base-200 rounded-md",
+            "flex flex-row w-full p-2 hover:bg-base-200 rounded-md border ",
             {
-              "border-dashed border border-primary": index == draggedOverTask,
+              "border-dashed border-primary": index == draggedOverTask,
+              "border-base-100": index != draggedOverTask,
             }
           )}
           key={task.id}
@@ -103,7 +104,7 @@ function Task({
     taskContent = (
       <>
         <input
-          className="input input-bordered col-span-3 font-semibold text-xl"
+          className="input input-bordered col-span-4 lg:col-span-3 font-semibold text-xl"
           value={task.text}
           onChange={(e) => {
             onChange({
@@ -133,7 +134,7 @@ function Task({
       <>
         <span
           className={clsx(
-            "col-span-3 self-center align-middle text-start w-full min-h-12 font-semibold text-xl items-center inline-flex",
+            "break-all col-span-4 lg:col-span-3 self-center align-middle text-start w-full min-h-12 font-semibold text-xl items-center inline-flex",
             { "line-through": task.done }
           )}
           onDoubleClick={() => setIsEditing(true)}
@@ -145,7 +146,7 @@ function Task({
   }
   return (
     <div className="w-full grid grid-cols-6 grid-rows-1">
-      <div className="drag-handle flex cursor-grab">
+      <div className="hidden drag-handle lg:flex cursor-grab">
         <DragIcon />
       </div>
 
