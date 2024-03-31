@@ -15,7 +15,7 @@ export interface TasksConfig {
 const initialConfig: TasksConfig = {
   checkAudio: "./sounds/defaultCheck.mp3",
   uncheckAudio: "./sounds/defaultCheck.mp3",
-  deleteAudio: "./sounds/defaultDelete.mp3",
+  deleteAudio: "./sounds/defaultDelete.mpeg",
   showCompletedTasks: true,
 };
 
