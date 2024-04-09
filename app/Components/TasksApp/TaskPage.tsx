@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useReducer } from "react";
+import useLocalStorageReducer from "@/app/_lib/customHooks/useLocalStorageWithReducer";
+import { useEffect } from "react";
+import { v4 as uuid } from "uuid";
 import AddTask from "./AddTask";
 import TaskList from "./TaskList";
-import useLocalStorageReducer from "@/app/_lib/customHooks/useLocalStorageWithReducer";
-import { v4 as uuid } from "uuid";
 
-export default function TaskApp() {
+export default function TaskPage() {
   //const [tasks, setTasks] = useLocalStorage("tasks", []);
   const [tasks, dispatch] = useLocalStorageReducer(
     tasksReducer,
@@ -71,6 +71,8 @@ export default function TaskApp() {
     </>
   );
 }
+
+
 
 function tasksReducer(tasks: Array<any>, action: any) {
   switch (action.type) {
