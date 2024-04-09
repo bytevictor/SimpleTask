@@ -1,4 +1,3 @@
-
 import { useConfig } from "@/app/_lib/contexts/ConfigContext";
 import DragIcon from "@/app/_lib/icons/DragIcon";
 import TrashIcon from "@/app/_lib/icons/TrashIcon";
@@ -16,7 +15,7 @@ export default function TaskList({
   onChangeTask: any;
   onDeleteTask: any;
 }) {
-  const {config} = useConfig();
+  const { config } = useConfig();
 
   const listRef = useRef(null);
 
@@ -24,6 +23,8 @@ export default function TaskList({
 
   const dragTask = useRef<number>(0);
   const draggedOverTaskIndex = useRef<number>(0);
+
+  const touchedTask = useRef<number>(-1);
 
   function handleDragEnter(index: number) {
     draggedOverTaskIndex.current = index;
@@ -39,6 +40,15 @@ export default function TaskList({
     setTasks(methodsClone);
   }
 
+  function handleTouchSwap(){
+    setDraggedOverTask(null);
+    const methodsClone = [...tasks];
+    const temp = methodsClone[touchedTask.current];
+    methodsClone[touchedTask.current] = methodsClone[draggedOverTaskIndex.current];
+    methodsClone[draggedOverTaskIndex.current] = temp;
+    setTasks(methodsClone);
+  }
+
   return (
     <ul
       ref={listRef}
@@ -47,11 +57,15 @@ export default function TaskList({
       {tasks.map((task: any, index: number) => (
         <li
           onDragStart={() => (dragTask.current = index)}
-          onTouchStart={() => (dragTask.current = index)}
+          onTouchStart={() => {
+            touchedTask.current = index;
+            handleTouchSwap();
+            dragTask.current = index;
+          }}
           onDragEnter={() => handleDragEnter(index)}
           //onTouchMove={() => handleDragEnter(index)}
           onDragEnd={handleSort}
-          //onTouchEnd={handleSort}
+
           onDragOver={(e) => e.preventDefault()}
           className={clsx(
             "flex flex-row w-full p-2 hover:bg-base-200 rounded-md border ",
@@ -59,7 +73,7 @@ export default function TaskList({
               "border-dashed border-primary": index == draggedOverTask,
               "border-base-100": index != draggedOverTask,
               //dont display if it's done on config
-              "hidden": !config.showCompletedTasks && task.done,
+              hidden: !config.showCompletedTasks && task.done,
             }
           )}
           key={task.id}
@@ -81,7 +95,7 @@ function Task({
   onChange: any;
   onDelete: any;
 }) {
-  const {config} = useConfig();
+  const { config } = useConfig();
 
   const playSoundCheck = () => {
     const audio = new Audio(config.checkAudio);

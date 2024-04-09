@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { ConfigContextProvider } from "./_lib/contexts/ConfigContext";
 import MainNavbar from "./Components/ConfigMenu/Navbar";
+import { NextAuthProvider } from "./_lib/auth/AuthProvider";
 
 //Using this just to be able to use localStorage is probably against the Geneva convention
 //but if I spend any more hours trying to figure out how to use localStorage
@@ -9,13 +10,19 @@ const TaskAppNoSSR = dynamic(() => import("./Components/TasksApp/TaskApp"), {
   ssr: false,
 });
 
-export default function Home() {
+export default function Home({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <ConfigContextProvider>
-      <MainNavbar />
-      <main className="flex min-h-full flex-col items-center lg:pt-0 lg:p-24 md:p-0 pt-0">
-        <TaskAppNoSSR />
-      </main>
+      <NextAuthProvider>
+        <MainNavbar />
+        <main className="flex min-h-full flex-col items-center lg:pt-0 lg:p-24 md:p-0 pt-0">
+          {children ? children : <TaskAppNoSSR />}
+        </main>
+      </NextAuthProvider>
     </ConfigContextProvider>
   );
 }
