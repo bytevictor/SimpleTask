@@ -1,3 +1,4 @@
+import { DisableTabsOption } from "./DisableTabs";
 import ThemeMenu from "./ThemeMenu";
 
 export default function ConfigMenu() {
@@ -26,8 +27,8 @@ export default function ConfigMenu() {
           ></label>
           <ul className="p-4 w-80 min-h-full bg-base-200 text-base-content">
             {/* Sidebar content here */}
-            <ThemeMenu></ThemeMenu>
-            
+            <ThemeMenu/>
+            <DisableTabsOption/>
           </ul>
         </div>
       </div>

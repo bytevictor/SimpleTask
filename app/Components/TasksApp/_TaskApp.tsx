@@ -7,12 +7,15 @@ import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { useEffect, useState } from "react";
 import TaskPage from "./TaskPage";
+import { config } from "process";
+import { useConfig } from "@/app/_lib/contexts/ConfigContext";
+import clsx from "clsx";
 
 const initialTasks: Task[] = [
-  { id: '2', text: "Drink matcha", done: false,  date: new Date() },
-  { id: '1', text: "Call grandma", done: false,  date: new Date() },
+  { id: "2", text: "Drink matcha", done: false, date: new Date() },
+  { id: "1", text: "Call grandma", done: false, date: new Date() },
   {
-    id: '0',
+    id: "0",
     text: "Contemplate the inevitable increase of entropy in the universe",
     done: true,
     date: new Date(),
@@ -24,6 +27,8 @@ const initialTabs: Array<Tab> = [{ id: 0, name: "To-Do", tasks: initialTasks }];
 const tabAtom = atomWithStorage("tabs", initialTabs);
 
 export default function TaskApp() {
+  const { config } = useConfig();
+
   const [tabs, setTabs] = useAtom(tabAtom);
 
   const [activeTab, setActiveTab] = useState(tabs[0].name);
@@ -54,14 +59,21 @@ export default function TaskApp() {
   return (
     <>
       <main className="flex min-h-full flex-col items-center lg:pt-4 lg:m-16 lg:mt-0 md:p-0 pt-0">
-        <TabsSelector
-          tabsState={tabs}
-          activeTab={activeTab}
-          addNewTab={addNewTab}
-          setActiveTab={setActiveTab}
-          updateTabs={setTabs}
-        />
-        <div className="py-4 flex flex-col items-center w-full border border-t-0 border-base-300 rounded-br-box rounded-bl-box">
+        {!config.disableTabs && (
+          <TabsSelector
+            tabsState={tabs}
+            activeTab={activeTab}
+            addNewTab={addNewTab}
+            setActiveTab={setActiveTab}
+            updateTabs={setTabs}
+          />
+        )}
+        <div
+          className={clsx(
+            "py-4 flex flex-col items-center w-full border border-t-0 border-base-300 rounded-br-box rounded-bl-box",
+            { "border-t": config.disableTabs }
+          )}
+        >
           <TaskPage
             tabtasks={activeTabTasks}
             updateTasks={(tasks: Task[]) => updateTasks(activeTab, tasks)}

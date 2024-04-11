@@ -10,6 +10,7 @@ export interface TasksConfig {
   uncheckAudio: string;
   deleteAudio: string;
   showCompletedTasks: boolean;
+  disableTabs: boolean;
 }
 
 const initialConfig: TasksConfig = {
@@ -17,6 +18,7 @@ const initialConfig: TasksConfig = {
   uncheckAudio: "./sounds/defaultCheck.mp3",
   deleteAudio: "./sounds/defaultDelete.mpeg",
   showCompletedTasks: true,
+  disableTabs: false,
 };
 
 export const ConfigContextProvider = ({
