@@ -1,22 +1,30 @@
 "use client";
 
-import useLocalStorage from "@/app/_lib/customHooks/useLocalStorageV2";
+import { Tab, Task } from "@/app/_lib/_Tasks/TaskTypes";
 import { PlusIcon } from "@/app/_lib/icons/PlusIcon";
-import TaskPage from "./TaskPage";
-import { useEffect, useState } from "react";
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
-import { animations } from "@formkit/drag-and-drop";
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
+import { useEffect, useState } from "react";
+import TaskPage from "./TaskPage";
 
-interface TabInfo {
-  id: number;
-  name: string;
-  taskList: any;
-}
+const initialTasks: Task[] = [
+  { id: '2', text: "Drink matcha", done: false,  date: new Date() },
+  { id: '1', text: "Call grandma", done: false,  date: new Date() },
+  {
+    id: '0',
+    text: "Contemplate the inevitable increase of entropy in the universe",
+    done: true,
+    date: new Date(),
+  },
+];
 
-const initialTabs: Array<TabInfo> = [{ id: 0, name: "To-Do", taskList: [] }];
+const initialTabs: Array<Tab> = [{ id: 0, name: "To-Do", tasks: initialTasks }];
 
-export default function TasksTab() {
-  const [tabs, setTabs] = useLocalStorage("tabs", initialTabs);
+const tabAtom = atomWithStorage("tabs", initialTabs);
+
+export default function TaskApp() {
+  const [tabs, setTabs] = useAtom(tabAtom);
 
   const [activeTab, setActiveTab] = useState(tabs[0].name);
 
@@ -24,10 +32,24 @@ export default function TasksTab() {
     const newTab = {
       id: tabs.length,
       name: `Tab ${tabs.length + 1}`,
-      taskList: [],
+      tasks: [],
     };
     setTabs([...tabs, newTab]);
   }
+
+  function updateTasks(tabName: string, tasks: Task[]) {
+    const newTabs = tabs.map((tab) => {
+      if (tab.name === tabName) {
+        return { ...tab, tasks: tasks };
+      }
+      return tab;
+    });
+
+    setTabs(newTabs);
+  }
+
+  const activeTabTasks =
+    tabs.find((tab) => tab.name === activeTab)?.tasks || [];
 
   return (
     <>
@@ -40,7 +62,10 @@ export default function TasksTab() {
           updateTabs={setTabs}
         />
         <div className="py-4 flex flex-col items-center w-full border border-t-0 border-base-300 rounded-br-box rounded-bl-box">
-          <TaskPage />
+          <TaskPage
+            tabtasks={activeTabTasks}
+            updateTasks={(tasks: Task[]) => updateTasks(activeTab, tasks)}
+          />
         </div>
       </main>
     </>
@@ -54,13 +79,13 @@ function TabsSelector({
   setActiveTab,
   updateTabs,
 }: {
-  tabsState: Array<TabInfo>;
+  tabsState: Array<Tab>;
   activeTab: string;
   addNewTab: () => void;
   setActiveTab: (tabName: string) => void;
-  updateTabs: (tabs: Array<TabInfo>) => void;
+  updateTabs: (tabs: Array<Tab>) => void;
 }) {
-  const [parent, tabs, setTabs] = useDragAndDrop<HTMLUListElement, TabInfo>(
+  const [parent, tabs, setTabs] = useDragAndDrop<HTMLUListElement, Tab>(
     tabsState,
     {
       //There is a bug with the animation because when the useEffect reAsigns the tabs the animation re-renders

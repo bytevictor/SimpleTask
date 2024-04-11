@@ -49,6 +49,8 @@ export default function TaskList({
     setTasks(methodsClone);
   }
 
+  console.log(tasks)
+
   return (
     <ul
       ref={listRef}
@@ -116,7 +118,8 @@ function Task({
     audio.play();
   };
 
-  const [isEditing, setIsEditing] = useState(task.isNew);
+  //A bit messy, but we avoid having a useless isNew value on the task
+  const [isEditing, setIsEditing] = useState(isCurrentSecond(task.date));
   let taskContent;
   if (isEditing) {
     taskContent = (
@@ -196,5 +199,18 @@ function Task({
         <TrashIcon />
       </button>
     </div>
+  );
+}
+
+
+function isCurrentSecond(date: Date): boolean {
+  const currentDate = new Date();
+  return (
+      date.getFullYear() === currentDate.getFullYear() &&
+      date.getMonth() === currentDate.getMonth() &&
+      date.getDate() === currentDate.getDate() &&
+      date.getHours() === currentDate.getHours() &&
+      date.getMinutes() === currentDate.getMinutes() &&
+      date.getSeconds() === currentDate.getSeconds()
   );
 }
