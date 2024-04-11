@@ -6,10 +6,10 @@ import { useState } from "react";
 export function DisableTabsOption() {
   const { config, updateConfig } = useConfig();
 
-  const disableTabs = config.disableTabs
+  const disableTabs = config.disableTabs;
 
   function toogleTabsFunctionality() {
-    updateConfig({ disableTabs: !disableTabs });
+    updateConfig({ ...config, disableTabs: !disableTabs });
   }
 
   return (

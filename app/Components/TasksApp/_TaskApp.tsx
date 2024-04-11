@@ -12,13 +12,13 @@ import { useConfig } from "@/app/_lib/contexts/ConfigContext";
 import clsx from "clsx";
 
 const initialTasks: Task[] = [
-  { id: "2", text: "Drink matcha", done: false, date: new Date() },
-  { id: "1", text: "Call grandma", done: false, date: new Date() },
+  { id: "2", text: "Drink matcha", done: false, date: new Date(99, 0) },
+  { id: "1", text: "Call grandma", done: false, date: new Date(99, 0) },
   {
     id: "0",
     text: "Contemplate the inevitable increase of entropy in the universe",
     done: true,
-    date: new Date(),
+    date: new Date(99, 0 ),
   },
 ];
 

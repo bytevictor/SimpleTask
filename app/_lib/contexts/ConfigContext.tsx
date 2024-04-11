@@ -1,5 +1,7 @@
 "use client";
 
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 // ConfigContext.tsx
 import React, { createContext, useState, useContext, ReactNode } from "react";
 
@@ -21,12 +23,14 @@ const initialConfig: TasksConfig = {
   disableTabs: false,
 };
 
+const configAtom = atomWithStorage("config", initialConfig);
+
 export const ConfigContextProvider = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const [config, setConfig] = useState<TasksConfig>(initialConfig);
+  const [config, setConfig] = useAtom(configAtom);
 
   const updateConfig = (newConfig: TasksConfig) => {
     setConfig({ ...newConfig });
