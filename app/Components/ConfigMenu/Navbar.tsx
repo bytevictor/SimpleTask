@@ -9,7 +9,7 @@ export default function MainNavbar() {
         <CompletedTasksSwap />
       </div>
       <div className="navbar-end pr-2 pt-2">
-        <LoginButton />
+        {/*<LoginButton />*/}
         <ConfigMenu />
       </div>
     </div>

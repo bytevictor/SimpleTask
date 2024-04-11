@@ -13,10 +13,10 @@ const TaskAppNoSSR = dynamic(() => import("./Components/TasksApp/TasksTab"), {
 export default function Home() {
   return (
     <ConfigContextProvider>
-      <NextAuthProvider>
+      {/*<NextAuthProvider>*/}
         <MainNavbar />
         <TaskAppNoSSR />
-      </NextAuthProvider>
+       {/*</NextAuthProvider>*/}
     </ConfigContextProvider>
   );
 }
