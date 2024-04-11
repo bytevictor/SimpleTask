@@ -10,16 +10,12 @@ const TaskAppNoSSR = dynamic(() => import("./Components/TasksApp/TasksTab"), {
   ssr: false,
 });
 
-export default function Home({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Home() {
   return (
     <ConfigContextProvider>
       <NextAuthProvider>
         <MainNavbar />
-        {children ? children : <TaskAppNoSSR />}
+        <TaskAppNoSSR />
       </NextAuthProvider>
     </ConfigContextProvider>
   );
