@@ -1,9 +1,8 @@
 "use client";
 
 import { Task } from "@/app/_lib/_Tasks/TaskTypes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import AddTask from "./AddTask";
 import TaskList from "./TaskList";
 
 export default function TaskPage({
@@ -28,17 +27,15 @@ export default function TaskPage({
   }, []);
 
   function handleAddTask(text: any) {
-    updateTasks(
-      [
+    updateTasks([
       {
         id: uuid(),
         text: text,
         done: false,
         date: new Date(),
       },
-      ...tabtasks
-    ]
-    );
+      ...tabtasks,
+    ]);
   }
 
   function handleChangeTask(task: any) {
@@ -57,7 +54,7 @@ export default function TaskPage({
     updateTasks(tabtasks.filter((t: any) => t.id !== taskId));
   }
 
-  console.log(tabtasks)
+  console.log(tabtasks);
 
   return (
     <>
@@ -69,5 +66,20 @@ export default function TaskPage({
         onDeleteTask={handleDeleteTask}
       />
     </>
+  );
+}
+
+function AddTask({ onAddTask }: { onAddTask: any }) {
+  const [text, setText] = useState("");
+  return (
+    <button
+      className="btn btn-primary btn-lg"
+      onClick={() => {
+        setText("");
+        onAddTask(text);
+      }}
+    >
+      Add Task
+    </button>
   );
 }
