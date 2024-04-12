@@ -1,16 +1,13 @@
 "use client";
 
 import { Tab, Task } from "@/app/_lib/_Tasks/TaskTypes";
-import { PlusIcon } from "@/app/_lib/icons/PlusIcon";
-import { useDragAndDrop } from "@formkit/drag-and-drop/react";
-import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
-import { useEffect, useState } from "react";
-import TaskPage from "./TaskPage";
-import { config } from "process";
 import { useConfig } from "@/app/_lib/contexts/ConfigContext";
 import clsx from "clsx";
-import { animations } from "@formkit/drag-and-drop";
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
+import { useState } from "react";
+import TabsSelector from "./TabSelector";
+import TaskPage from "./TaskPage";
 
 const initialTasks: Task[] = [
   { id: "2", text: "Drink matcha", done: false, date: new Date(99, 0) },
@@ -34,13 +31,39 @@ export default function TaskApp() {
 
   const [activeTab, setActiveTab] = useState(tabs[0].name);
 
-  function addNewTab() {
+  function addNewTab(name: string) {
+    // Guarda el nombre original
+    let originalName = name;
+
+    // Verifica si la pestaña con el nombre ya existe
+    let doesTabExist = tabs.some((tab) => tab.name === name);
+    let counter = 2;
+
+    while (doesTabExist) {
+      // Usa el nombre original y añade el contador
+      name = originalName + " (" + counter + ")";
+      doesTabExist = tabs.some((tab) => tab.name === name);
+      counter++;
+    }
+
+    //Add new tab with unique name
+    const maxId = tabs.reduce((max, tab) => Math.max(max, tab.id), 0);
     const newTab = {
-      id: tabs.length,
-      name: `Tab ${tabs.length + 1}`,
+      id: maxId + 1,
+      name: name,
       tasks: [],
     };
     setTabs([...tabs, newTab]);
+  }
+
+  function changeTabName(tabId: number, newName: string) {
+    setTabs(
+      tabs.map((tab) => (tab.id === tabId ? { ...tab, name: newName } : tab))
+    );
+  }
+
+  function deleteTab(tabId: number) {
+    setTabs(tabs.filter((tab) => tab.id !== tabId));
   }
 
   function updateTasks(tabName: string, tasks: Task[]) {
@@ -64,15 +87,20 @@ export default function TaskApp() {
           <TabsSelector
             tabsState={tabs}
             activeTab={activeTab}
-            addNewTab={addNewTab}
+            addNewTab={() => addNewTab("Tab")}
             setActiveTab={setActiveTab}
             updateTabs={setTabs}
+            changeTabName={changeTabName}
+            deleteTab={deleteTab}
           />
         )}
         <div
           className={clsx(
-            "py-8 flex flex-col items-center w-full border border-t-0 border-b-0 lg:border-b border-base-300 rounded-br-box rounded-bl-box",
-            { "border-t": config.disableTabs }
+            "py-8 flex flex-col items-center w-full border border-t border-b-0 lg:border-b border-base-300 rounded-br-box rounded-bl-box",
+            {
+              "border-t-0": !config.disableTabs,
+              "rounded-tl-box rounded-tr-box": config.disableTabs,
+            }
           )}
         >
           <TaskPage
@@ -85,66 +113,3 @@ export default function TaskApp() {
   );
 }
 
-function TabsSelector({
-  tabsState,
-  activeTab,
-  addNewTab,
-  setActiveTab,
-  updateTabs,
-}: {
-  tabsState: Array<Tab>;
-  activeTab: string;
-  addNewTab: () => void;
-  setActiveTab: (tabName: string) => void;
-  updateTabs: (tabs: Array<Tab>) => void;
-}) {
-  const [parent, tabs, setTabs] = useDragAndDrop<HTMLUListElement, Tab>(
-    tabsState,
-    {
-      //There is a bug with the animation because when the useEffect 
-      // reAsigns the tabs the animation re-renders
-      //plugins: [animations()],
-      handleEnd(data) {
-        console.log("handleEnd", data);
-        updateTabs([...tabs]);
-        setTabs([...tabs]);
-      },
-      draggable: (el) => {
-        return el.id !== "no-drag";
-      },
-    }
-  );
-
-  useEffect(() => {
-    setTabs([...tabsState]);
-  }, [tabsState, setTabs]);
-
-  console.log(tabs);
-
-  return (
-    <ul
-      ref={parent}
-      role="tablist"
-      className="w-full overflow-x-scroll tabs tabs-lg tabs-lifted tabs-base-300 self-start"
-    >
-      {tabs.map((tab) => (
-        <li
-          className={`tab ${activeTab == tab.name ? "tab-active" : ""}`}
-          key={tab.id}
-          onClick={() => setActiveTab(tab.name)}
-        >
-          <span className="text-lg text-nowrap overflow-hidden">{tab.name}</span>
-        </li>
-      ))}
-
-      <li className="tab tab-active" id="no-drag">
-        <button
-          onClick={addNewTab}
-          className="btn btn-sm btn-circle btn-outline btn-success"
-        >
-          <PlusIcon />
-        </button>
-      </li>
-    </ul>
-  );
-}
