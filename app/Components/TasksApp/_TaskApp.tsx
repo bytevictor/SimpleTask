@@ -10,6 +10,7 @@ import TaskPage from "./TaskPage";
 import { config } from "process";
 import { useConfig } from "@/app/_lib/contexts/ConfigContext";
 import clsx from "clsx";
+import { animations } from "@formkit/drag-and-drop";
 
 const initialTasks: Task[] = [
   { id: "2", text: "Drink matcha", done: false, date: new Date(99, 0) },
@@ -18,7 +19,7 @@ const initialTasks: Task[] = [
     id: "0",
     text: "Contemplate the inevitable increase of entropy in the universe",
     done: true,
-    date: new Date(99, 0 ),
+    date: new Date(99, 0),
   },
 ];
 
@@ -70,7 +71,7 @@ export default function TaskApp() {
         )}
         <div
           className={clsx(
-            "py-4 flex flex-col items-center w-full border border-t-0 border-base-300 rounded-br-box rounded-bl-box",
+            "py-8 flex flex-col items-center w-full border border-t-0 border-b-0 lg:border-b border-base-300 rounded-br-box rounded-bl-box",
             { "border-t": config.disableTabs }
           )}
         >
@@ -100,8 +101,8 @@ function TabsSelector({
   const [parent, tabs, setTabs] = useDragAndDrop<HTMLUListElement, Tab>(
     tabsState,
     {
-      //There is a bug with the animation because when the useEffect reAsigns the tabs the animation re-renders
-      //
+      //There is a bug with the animation because when the useEffect 
+      // reAsigns the tabs the animation re-renders
       //plugins: [animations()],
       handleEnd(data) {
         console.log("handleEnd", data);
@@ -124,7 +125,7 @@ function TabsSelector({
     <ul
       ref={parent}
       role="tablist"
-      className="w-full tabs tabs-lg tabs-lifted tabs-base-300 self-start"
+      className="w-full overflow-x-scroll tabs tabs-lg tabs-lifted tabs-base-300 self-start"
     >
       {tabs.map((tab) => (
         <li
@@ -132,7 +133,7 @@ function TabsSelector({
           key={tab.id}
           onClick={() => setActiveTab(tab.name)}
         >
-          <span className="text-lg">{tab.name}</span>
+          <span className="text-lg text-nowrap overflow-hidden">{tab.name}</span>
         </li>
       ))}
 
